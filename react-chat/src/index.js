@@ -28,7 +28,10 @@ const App = () => {
       timerID = setTimeout(() => {
         setMessageList([
           ...messageList,
-          { author: "Bot", text: `Hello, ${lastMessage.author}` },
+          {
+            author: "Bot",
+            text: `Это автоматически отправляемое ботом сообщение. Привет, ${lastMessage.author}`,
+          },
         ]);
       }, 1500);
     }
