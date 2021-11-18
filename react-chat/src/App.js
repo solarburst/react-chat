@@ -1,18 +1,42 @@
-import "./App.css";
+import "./style.css";
 
 function App() {
-  const Message = ({ message }) => {
-    return <h3 className="App-message">{message}</h3>;
+  const messages = [
+    {
+      author: "qwe",
+      text: "123",
+    },
+    {
+      author: "zxc",
+      text: "321",
+    },
+  ];
+
+  const Message = ({ author, text }) => {
+    return (
+      <div className="message">
+        <p className="messageAuthor">{author}</p>
+        <p className="messageText">{text}</p>
+      </div>
+    );
   };
 
-  const text =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+  const MessageList = ({ messages }) => {
+    return messages.map((message) => {
+      return (
+        <Message key={message.id} author={message.author} text={message.text} />
+      );
+    });
+  };
+
+  function Title() {
+    return <header className="title">React Chat</header>;
+  }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <Message message={text} />
-      </header>
+    <div className="app">
+      <Title />
+      <MessageList messages={messages} />
     </div>
   );
 }
