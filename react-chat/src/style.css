@@ -3,38 +3,10 @@ body {
   padding: 0;
 }
 
-.title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  color: white;
-  background: black;
-  text-align: center;
-}
-
 /* .container {
   max-width: 1040px;
   margin: 0 auto;
 } */
-
-.message {
-  margin: 15px 10px;
-}
-
-.messageAuthor {
-  color: #3e5869;
-  margin-bottom: 3px;
-}
-
-.messageText {
-  background: lightblue;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 8px;
-  margin: 6px 0px;
-  display: inline-block;
-}
 
 .form {
   width: 100%;
@@ -52,12 +24,9 @@ body {
 
 .form input {
   border: 1px lightblue solid;
+  width: 100%;
 }
 
 .form input::placeholder {
   color: lightblue;
-}
-
-.form input:nth-child(2) {
-  width: 100%;
 }
