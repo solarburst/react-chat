@@ -1,44 +1,61 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Message } from "./Message";
-import { Title } from "./Title";
 import styles from "./Message/Message.module.css";
-import { ChatList } from "./ChatList";
+
 
 export const App = () => {
   const [messageList, setMessageList] = useState([]);
   const [text, setText] = useState("");
+  const { roomID } = useParams();
 
   const ref = useRef(null);
+  const refScroll = useRef(null);
 
   useEffect(() => {
-    const lastMessage = messageList[messageList.length - 1];
+    if (refScroll.current) {
+      refScroll.current.scrollTo(0, refScroll.current.scrollHeight);
+    }
+  }, [messageList]);
+
+  useEffect(() => {
+    const roomMessages = messageList[roomID] ?? [];
+    const lastMessage = roomMessages[roomMessages.length - 1];
     let timerID = null;
 
-    if (messageList.length && lastMessage.author !== "Bot") {
+    if (roomMessages.length && lastMessage.author !== "Bot") {
       timerID = setTimeout(() => {
-        setMessageList([
+        setMessageList({
           ...messageList,
-          {
-            date: new Date(),
-            author: "Bot",
-            text: `Это автоматически отправляемое ботом сообщение. Привет, ${lastMessage.author}`,
-          },
-        ]);
+          [roomID]: [
+            ...(messageList[roomID] ?? []),
+            {
+              author: "Bot",
+              text: `Hello, ${lastMessage.author}`,
+              date: new Date(),
+            },
+          ],
+        });
       }, 1500);
     }
     return () => clearInterval(timerID);
-  }, [messageList]);
+  }, [messageList, roomID]);
 
   useEffect(() => {
     ref.current?.focus();
   }, []);
 
   const newMessage = () => {
-    setMessageList([
-      ...messageList,
-      { author: "User", text: text, date: new Date() },
-    ]);
-    setText("");
+    if (text) {
+      setMessageList({
+        ...messageList,
+        [roomID]: [
+          ...(messageList[roomID] ?? []),
+          { author: "User", text: text, date: new Date() },
+        ],
+      });
+      setText("");
+    }
   };
 
   const handlePressInputText = ({ code }) => {
@@ -48,14 +65,13 @@ export const App = () => {
     ref.current?.focus();
   };
 
+  const roomMessages = messageList[roomID] ?? [];
+
   return (
-    <div className="app">
-      <Title />
       <div className={styles.container}>
-        <ChatList />
         <div className={styles.messagesContainer}>
-          <div className={styles.messageList}>
-            {messageList.map((message) => (
+          <div className={styles.messageList} ref={refScroll}>
+            {roomMessages.map((message) => (
               <Message message={message} key={message.date} />
             ))}
           </div>
@@ -73,6 +89,5 @@ export const App = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
