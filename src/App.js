@@ -26,8 +26,6 @@ function App() {
     console.log("chat msg", chatMessages);
   }, [chatId, messages]);
 
-  console.log("messages", messages);
-
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
