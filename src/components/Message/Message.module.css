@@ -1,0 +1,32 @@
+.messageList {
+  width: 100%;
+}
+
+.messageUser {
+  padding-left: 10px;
+}
+
+.messageUser {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 10px;
+}
+
+.messageBot {
+  color: #3e5869;
+  margin-bottom: 3px;
+  padding-left: 10px;
+}
+
+.messageText {
+  background: lightblue;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+  margin: 6px 0px;
+  display: inline-block;
+}
+
+.messagesContainer {
+  width: 90%;
+}
