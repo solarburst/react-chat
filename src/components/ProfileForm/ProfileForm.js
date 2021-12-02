@@ -8,8 +8,8 @@ const ProfileForm = ({ firstName, lastName, phone }) => {
   const dispatch = useDispatch();
 
   const handleChangeForm = (e) => {
+    console.log("e", e);
     const field = e.target.getAttribute("data-name");
-
     setForm({ ...form, [field]: e.target.value });
   };
 
