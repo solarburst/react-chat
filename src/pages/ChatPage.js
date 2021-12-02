@@ -1,32 +1,39 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { sendMessage } from "../store/messages";
 import Message from "../components/Message/Message.js";
 import ChatList from "../components/ChatList/ChatList.js";
 import Title from "../components/Title/Title.js";
 
 const ChatPage = () => {
-  const [messages, setMessages] = useState([]);
+  const dispatch = useDispatch();
+
   const [filteredMessages, setFilteredMessages] = useState([]);
   const [text, setText] = useState("");
-  const [chatId, setChatId] = useState();
+
+  const { messages } = useSelector(({ messages }) => {
+    console.log("msg", messages);
+    return messages;
+  });
+  const { activeChat } = useSelector(({ chats }) => chats);
 
   const handleSubmit = (author, text) => {
-    const obj = {
-      chatId: chatId,
+    const message = {
+      chatId: activeChat,
       text: text,
       author: author,
       date: new Date(),
     };
-    setMessages((prevState) => [...prevState, obj]);
+    dispatch(sendMessage(message));
     setText("");
   };
 
   useEffect(() => {
     const chatMessages = messages.filter(
-      (message) => message.chatId === chatId
+      (message) => message.chatId === activeChat
     );
     setFilteredMessages(chatMessages);
-    console.log("chat msg", chatMessages);
-  }, [chatId, messages]);
+  }, [activeChat, messages]);
 
   useEffect(() => {
     const lastMessage = filteredMessages[filteredMessages.length - 1];
@@ -39,15 +46,13 @@ const ChatPage = () => {
     }
 
     return () => clearInterval(timerID);
-  }, [filteredMessages, handleSubmit, chatId]);
-
-  console.log("filtered", filteredMessages);
+  }, [filteredMessages, handleSubmit, activeChat]);
 
   return (
     <div>
       <Title />
-      <ChatList setChatId={setChatId} />
-      {chatId && (
+      <ChatList />
+      {activeChat && (
         <>
           <div>
             {filteredMessages.map((message) => (
