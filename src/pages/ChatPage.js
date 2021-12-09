@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { sendMessage } from "../store/messages";
+import { botSendMessage } from "../store/messages";
 import Message from "../components/Message/Message.js";
 import ChatList from "../components/ChatList/ChatList.js";
 import Title from "../components/Title/Title.js";
@@ -17,11 +18,11 @@ const ChatPage = () => {
   });
   const { activeChat } = useSelector(({ chats }) => chats);
 
-  const handleSubmit = (author, text) => {
+  const handleSubmit = () => {
     const message = {
       chatId: activeChat,
       text: text,
-      author: author,
+      author: "User",
       date: new Date(),
     };
     dispatch(sendMessage(message));
@@ -37,16 +38,11 @@ const ChatPage = () => {
 
   useEffect(() => {
     const lastMessage = filteredMessages[filteredMessages.length - 1];
-    let timerID = null;
 
     if (filteredMessages.length && lastMessage.author !== "Bot") {
-      timerID = setTimeout(() => {
-        handleSubmit("Bot", "Я бот");
-      }, 1500);
+      dispatch(botSendMessage(activeChat, "Я бот"));
     }
-
-    return () => clearInterval(timerID);
-  }, [filteredMessages, handleSubmit, activeChat]);
+  }, [filteredMessages, activeChat, dispatch]);
 
   return (
     <div>
@@ -64,7 +60,7 @@ const ChatPage = () => {
             ))}
           </div>
           <input value={text} onChange={(e) => setText(e.target.value)} />
-          <button onClick={() => handleSubmit("User", text)}>Send</button>
+          <button onClick={() => handleSubmit()}>Send</button>
         </>
       )}
     </div>
