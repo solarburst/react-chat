@@ -1,53 +1,68 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { sendMessage } from "../store/messages";
+import { botSendMessage } from "../store/messages";
+import { getChatsFromDB } from "../store/chats/thunks";
+import { postMessagesToDB, getMessagesFromDB } from "../store/messages/thunks";
 import Message from "../components/Message/Message.js";
 import ChatList from "../components/ChatList/ChatList.js";
 import Title from "../components/Title/Title.js";
 
 const ChatPage = () => {
-  const [messages, setMessages] = useState([]);
+  const dispatch = useDispatch();
+
   const [filteredMessages, setFilteredMessages] = useState([]);
   const [text, setText] = useState("");
-  const [chatId, setChatId] = useState();
 
-  const handleSubmit = (author, text) => {
-    const obj = {
-      chatId: chatId,
+  const { messages } = useSelector(({ messages }) => {
+    console.log("msg", messages);
+    return messages;
+  });
+  const { activeChat } = useSelector(({ chats }) => chats);
+
+  const handleSubmit = () => {
+    const message = {
+      chatId: activeChat,
       text: text,
-      author: author,
+      author: "User",
       date: new Date(),
     };
-    setMessages((prevState) => [...prevState, obj]);
+    dispatch(sendMessage(message));
     setText("");
   };
 
   useEffect(() => {
     const chatMessages = messages.filter(
-      (message) => message.chatId === chatId
+      (message) => message.chatId === activeChat
     );
     setFilteredMessages(chatMessages);
-    console.log("chat msg", chatMessages);
-  }, [chatId, messages]);
+  }, [activeChat, messages]);
 
   useEffect(() => {
     const lastMessage = filteredMessages[filteredMessages.length - 1];
-    let timerID = null;
 
     if (filteredMessages.length && lastMessage.author !== "Bot") {
-      timerID = setTimeout(() => {
-        handleSubmit("Bot", "Я бот");
-      }, 1500);
+      dispatch(botSendMessage(activeChat, "Я бот"));
     }
+  }, [filteredMessages, activeChat, dispatch]);
 
-    return () => clearInterval(timerID);
-  }, [filteredMessages, handleSubmit, chatId]);
+  useEffect(() => {
+    dispatch(getChatsFromDB());
+  }, [dispatch]);
 
-  console.log("filtered", filteredMessages);
+  useEffect(() => {
+    dispatch(postMessagesToDB(messages));
+  }, [dispatch, messages]);
+
+  useEffect(() => {
+    dispatch(getMessagesFromDB());
+  }, []);
 
   return (
     <div>
       <Title />
-      <ChatList setChatId={setChatId} />
-      {chatId && (
+      <ChatList />
+      {activeChat && (
         <>
           <div>
             {filteredMessages.map((message) => (
@@ -59,7 +74,7 @@ const ChatPage = () => {
             ))}
           </div>
           <input value={text} onChange={(e) => setText(e.target.value)} />
-          <button onClick={() => handleSubmit("User", text)}>Send</button>
+          <button onClick={() => handleSubmit()}>Send</button>
         </>
       )}
     </div>

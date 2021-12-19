@@ -15,7 +15,10 @@ export const profileReducer = (state = initialState, action) => {
       return { ...state, isVisibleProfile: !state.isVisibleProfile };
     }
     case UPDATE_PROFILE: {
-      return { ...state, ...action.payload };
+      return {
+        ...state,
+        ...action.payload,
+      };
     }
     default:
       return state;

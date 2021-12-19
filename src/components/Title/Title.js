@@ -7,6 +7,7 @@ const Title = () => {
       <Link to="/">Home</Link>
       <Link to="/profile">Profile</Link>
       <Link to="/chat">Chat</Link>
+      <Link to="/cats">Cats</Link>
     </div>
   );
 };
