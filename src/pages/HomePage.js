@@ -11,20 +11,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-{
-  /* <div>
-      
-      {chatId && (
-        <>
-          <div>
-            {messages.map((message) => (
-              <div></div>
-            ))}
-          </div>
-          <input value={text} onChange={(e) => setText(e.target.value)} />
-          <button onClick={handleSubmit}>Send</button>
-        </>
-      )}
-    </div> */
-}
