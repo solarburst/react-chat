@@ -1,11 +1,7 @@
-import { CREATE_CHAT, DELETE_CHAT, SET_ACTIVE_CHAT } from "./types";
+import { CREATE_CHAT, DELETE_CHAT, SET_ACTIVE_CHAT, GET_CHATS } from "./types";
 
 const initialState = {
-  chats: [
-    { id: 1, name: "chat 1" },
-    { id: 2, name: "chat 2" },
-    { id: 3, name: "chat 3" },
-  ],
+  chats: [],
   activeChat: null,
 };
 
@@ -25,6 +21,11 @@ export const chatReducer = (state = initialState, action) => {
       return {
         ...state,
         activeChat: action.payload,
+      };
+    case GET_CHATS:
+      return {
+        ...state,
+        chats: action.payload,
       };
     default:
       return state;

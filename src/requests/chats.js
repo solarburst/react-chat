@@ -1,5 +1,6 @@
-import axios from "axios";
+import { getDatabase, ref, child, get } from "firebase/database";
 
 export const fetchChats = () => {
-  return axios.get("http://localhost:3001/chats");
+  const dbRef = ref(getDatabase());
+  return get(child(dbRef, `chats/`));
 };

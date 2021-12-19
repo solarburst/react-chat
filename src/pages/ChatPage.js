@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { sendMessage } from "../store/messages";
 import { botSendMessage } from "../store/messages";
+import { getChatsFromDB } from "../store/chats/thunks";
+import { postMessagesToDB, getMessagesFromDB } from "../store/messages/thunks";
 import Message from "../components/Message/Message.js";
 import ChatList from "../components/ChatList/ChatList.js";
 import Title from "../components/Title/Title.js";
@@ -43,6 +45,18 @@ const ChatPage = () => {
       dispatch(botSendMessage(activeChat, "Я бот"));
     }
   }, [filteredMessages, activeChat, dispatch]);
+
+  useEffect(() => {
+    dispatch(getChatsFromDB());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(postMessagesToDB(messages));
+  }, [dispatch, messages]);
+
+  useEffect(() => {
+    dispatch(getMessagesFromDB());
+  }, []);
 
   return (
     <div>

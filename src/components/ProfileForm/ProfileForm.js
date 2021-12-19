@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { Input, Button } from "@mui/material";
 import { updateProfile } from "../../store/profile";
 
 const ProfileForm = ({ firstName, lastName, phone }) => {
@@ -8,7 +9,6 @@ const ProfileForm = ({ firstName, lastName, phone }) => {
   const dispatch = useDispatch();
 
   const handleChangeForm = (e) => {
-    console.log("e", e);
     const field = e.target.getAttribute("data-name");
     setForm({ ...form, [field]: e.target.value });
   };
@@ -17,22 +17,22 @@ const ProfileForm = ({ firstName, lastName, phone }) => {
     <div>
       <h1>Edit Profile</h1>
       <div>
-        <input
+        <Input
           value={form.firstName}
           inputProps={{ "data-name": "firstName" }}
           onChange={handleChangeForm}
         />
-        <input
+        <Input
           value={form.lastName}
           inputProps={{ "data-name": "lastName" }}
           onChange={handleChangeForm}
         />
-        <input
+        <Input
           value={form.phone}
           inputProps={{ "data-name": "phone" }}
           onChange={handleChangeForm}
         />
-        <button onClick={() => dispatch(updateProfile(form))}>Save Form</button>
+        <Button onClick={() => dispatch(updateProfile(form))}>Save Form</Button>
       </div>
     </div>
   );

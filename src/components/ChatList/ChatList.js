@@ -8,6 +8,7 @@ const ChatList = () => {
   const [chatName, setChatName] = useState("");
 
   const { chats } = useSelector(({ chats }) => chats);
+  console.log("чаты", chats);
 
   const handleChange = (e) => setChatName(e.target.value);
   const onChatChange = (id) => dispatch(setActiveChat(id));
@@ -28,7 +29,7 @@ const ChatList = () => {
   return (
     <>
       <div>
-        {chats.map((chat) => (
+        {chats?.map((chat) => (
           <div key={chat.id} onClick={() => onChatChange(chat.id)}>
             {chat.name}
             <span onClick={() => removeChat(chat.id)}> - </span>
